@@ -49,12 +49,14 @@
       </i-grid-item>
     </i-grid>
     <i-panel title="美食推荐">
-      <view class="top-padding">
-         <i-card title="西餐" extra="服务态度好" thumb="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554136734498&di=4a94d72ac1a61ec76e83c1e5e6202629&imgtype=0&src=http%3A%2F%2Fimg1.qunarzz.com%2Fp%2Ftts6%2F1702%2Fa4%2Feac2c8a1e491e02.jpg_r_750x500x90_d537b527.jpg">
-          <view slot="content">八分熟牛排</view>
-          <view slot="footer">好是好吃，但是好贵</view>
+
+      <view v-for="item in candys" :key="item" class="top-padding">
+         <i-card  :title="item.name" :extra="item.introduction" thumb="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554136734498&di=4a94d72ac1a61ec76e83c1e5e6202629&imgtype=0&src=http%3A%2F%2Fimg1.qunarzz.com%2Fp%2Ftts6%2F1702%2Fa4%2Feac2c8a1e491e02.jpg_r_750x500x90_d537b527.jpg">
+          <view slot="content">{{item.type}}</view>
+          <view slot="footer">{{item.commitment}}</view>
          </i-card>
-         <view class="top-padding"></view>
+      </view>
+         <!-- <view class="top-padding"></view>
          <i-card title="马卡龙" extra="超级好吃" thumb="http://img1.imgtn.bdimg.com/it/u=2023513984,2730774655&fm=26&gp=0.jpg">
           <view slot="content">超级好看呢</view>
           <view slot="footer">一款超级好看还超级好吃的甜品</view>
@@ -68,9 +70,9 @@
          <i-card title="辣条" extra="就是挺喜欢吃的" thumb="http://img2.imgtn.bdimg.com/it/u=1535460409,2183749429&fm=26&gp=0.jpg">
           <view slot="content">辣条这个。。这个。。哈哈哈</view>
           <view slot="footer">最然喜欢吃，但是还是要少吃，毕竟不健康</view>
-         </i-card>
-          <view class="top-padding"></view>
-      </view>
+         </i-card>  -->
+         <!-- <view class="top-padding"></view> -->
+    
     </i-panel>
   </div>
 </template>
@@ -81,6 +83,7 @@ import card from '@/components/card'
 export default {
   data () {
     return {
+      candys: [],
       notice: '有人说：',
       grids: ['点心','主食','外卖','饮料','菜蔬','面食'],
       motto: 'Hello miniprograme',
@@ -94,6 +97,17 @@ export default {
   components: {
     card
   },
+
+  created () {
+    const db = wx.cloud.database({ env:'wangxu-44b924' })
+    db.collection('candy').get().then(
+      res => {
+        console.log(res)
+        this.candys = res.data
+      }
+    )
+  },
+
 
   methods: {
     bindViewTap () {
